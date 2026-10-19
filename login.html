@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Campus-Tutor | Peer Academic Help Marketplace</title>
+    <meta name="description" content="Sign in or register for Campus-Tutor. Connect with student peers across your university campus.">
+    <link rel="stylesheet" href="stylee.css">
+</head>
+<body class="auth-page">
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="title">
+            <a href="index.html">
+                <h1>Campus-Tutor <span class="logo-badge">PEER</span></h1>
+            </a>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="browse.html">Browse Requests</a>
+            <a href="postrequest.html">Post a Request</a>
+            <a href="profile.html">My Profile</a>
+            <a href="login.html" class="active nav-login-btn">Sign In</a>
+        </nav>
+    </header>
+
+    <!-- Main Login Area -->
+    <main class="auth-main-wrapper">
+        <!-- Ambient Glowing Background Elements -->
+        <div class="auth-bg-blob blob-1"></div>
+        <div class="auth-bg-blob blob-2"></div>
+        <div class="auth-bg-blob blob-3"></div>
+
+        <div class="auth-container">
+            <div class="auth-form-card" id="auth-form-card">
+                
+                <!-- Form Header -->
+                <div class="form-header-box" style="text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 38px; display: block; margin-bottom: 8px;">🎓</span>
+                    <h3 id="form-heading">Welcome Back, Student!</h3>
+                    <p id="form-subheading">Sign in with your campus credentials to access your peer tutoring dashboard.</p>
+                </div>
+
+                <!-- Auth Error/Alert Notification Box -->
+                <div id="auth-alert-message" class="auth-alert-box" style="display: none;">
+                    <span id="auth-alert-icon">⚠️</span>
+                    <span id="auth-alert-text"></span>
+                </div>
+
+                <!-- ==============================================
+                     STUDENT AUTHENTICATION (Sign In / Register)
+                     ============================================== -->
+                <div id="student-form-wrapper" class="form-mode-view active" role="tabpanel">
+                    
+                    <!-- Sub-Nav: Sign In vs Create Account -->
+                    <div class="auth-sub-nav">
+                        <button type="button" class="auth-sub-tab active" id="tab-sub-signin" onclick="switchStudentAuthMode('signin')">
+                            Sign In
+                        </button>
+                        <button type="button" class="auth-sub-tab" id="tab-sub-signup" onclick="switchStudentAuthMode('signup')">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <!-- 1. STUDENT SIGN IN FORM -->
+                    <form id="student-login-form" onsubmit="handleStudentLogin(event)">
+                        <div class="input-group">
+                            <label for="student-email">Campus Email <span class="required-star">*</span></label>
+                            <div class="input-field-wrapper">
+                                <input 
+                                    type="email" 
+                                    id="student-email" 
+                                    placeholder="e.g. alex.m@campus.edu" 
+                                    value="alex.m@campus.edu" 
+                                    required 
+                                    autocomplete="username"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="student-password">Password <span class="required-star">*</span></label>
+                            <div class="input-field-wrapper">
+                                <input 
+                                    type="password" 
+                                    id="student-password" 
+                                    placeholder="Enter your password" 
+                                    value="student123" 
+                                    required 
+                                    autocomplete="current-password"
+                                >
+                                <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('student-password', this)" aria-label="Toggle password visibility">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="student-remember" checked>
+                                <span>Remember my login</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="auth-submit-btn student-btn" id="student-submit-btn">
+                            <span class="btn-text">Sign In as Student</span>
+                            <span class="btn-spinner" style="display: none;"></span>
+                            <span class="btn-arrow">→</span>
+                        </button>
+                    </form>
+
+                    <!-- 2. STUDENT CREATE ACCOUNT FORM -->
+                    <form id="student-signup-form" onsubmit="handleStudentSignup(event)" style="display: none;">
+                        <div class="input-group">
+                            <label for="signup-name">Full Name <span class="required-star">*</span></label>
+                            <div class="input-field-wrapper">
+                                <input 
+                                    type="text" 
+                                    id="signup-name" 
+                                    placeholder="e.g. Alex Morgan" 
+                                    required 
+                                    autocomplete="name"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="signup-email">Campus Email <span class="required-star">*</span></label>
+                            <div class="input-field-wrapper">
+                                <input 
+                                    type="email" 
+                                    id="signup-email" 
+                                    placeholder="e.g. alex.m@campus.edu" 
+                                    required 
+                                    autocomplete="email"
+                                >
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="input-group">
+                                <label for="signup-id">Student ID</label>
+                                <div class="input-field-wrapper">
+                                    <input 
+                                        type="text" 
+                                        id="signup-id" 
+                                        placeholder="STU-8821"
+                                    >
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="signup-dept">Major <span class="required-star">*</span></label>
+                                <div class="input-field-wrapper">
+                                    <input 
+                                        type="text" 
+                                        id="signup-dept" 
+                                        placeholder="Computer Science" 
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="signup-password">Create Password <span class="required-star">*</span></label>
+                            <div class="input-field-wrapper">
+                                <input 
+                                    type="password" 
+                                    id="signup-password" 
+                                    placeholder="Minimum 6 characters" 
+                                    minlength="6" 
+                                    required 
+                                    autocomplete="new-password"
+                                >
+                                <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('signup-password', this)" aria-label="Toggle password visibility">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="auth-submit-btn student-btn" id="signup-submit-btn">
+                            <span class="btn-text">Create Student Account</span>
+                            <span class="btn-spinner" style="display: none;"></span>
+                            <span class="btn-arrow">→</span>
+                        </button>
+                    </form>
+
+                    <!-- Quick switch footer -->
+                    <div class="auth-card-footer" id="student-card-footer" style="margin-top: 18px; text-align: center;">
+                        <p id="footer-switch-text" style="margin: 0; font-size: 13.5px; color: #475569;">
+                            New to Campus-Tutor? <a href="javascript:void(0)" onclick="switchStudentAuthMode('signup')" style="color: var(--accent-amber); font-weight: 700; text-decoration: underline;">Create a student account</a>
+                        </p>
+
+                        <!-- Separated Institutional Admin Portal Gateway -->
+                        <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #F1F5F9; font-size: 12.5px; color: #64748B;">
+                            University Faculty or Staff Moderator? 
+                            <a href="admin-login.html" style="color: #2563EB; font-weight: 700; text-decoration: underline;">
+                                Dedicated Admin Portal &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Campus-Tutor. Connecting campus minds for peer academic success.</p>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="app.js"></script>
+    <script>
+        let currentStudentMode = 'signin';
+
+        function showAlert(msg, isSuccess = false) {
+            const box = document.getElementById('auth-alert-message');
+            const txt = document.getElementById('auth-alert-text');
+            const icon = document.getElementById('auth-alert-icon');
+            if (!box || !txt) return;
+
+            txt.textContent = msg;
+            icon.textContent = isSuccess ? '✅' : '⚠️';
+            box.className = isSuccess ? 'auth-alert-box success' : 'auth-alert-box';
+            box.style.display = 'flex';
+        }
+
+        function hideAlert() {
+            const box = document.getElementById('auth-alert-message');
+            if (box) box.style.display = 'none';
+        }
+
+        function switchStudentAuthMode(mode) {
+            currentStudentMode = mode;
+            hideAlert();
+            const tabSignIn = document.getElementById('tab-sub-signin');
+            const tabSignUp = document.getElementById('tab-sub-signup');
+            const formSignIn = document.getElementById('student-login-form');
+            const formSignUp = document.getElementById('student-signup-form');
+            const heading = document.getElementById('form-heading');
+            const subheading = document.getElementById('form-subheading');
+            const footerText = document.getElementById('footer-switch-text');
+
+            if (mode === 'signin') {
+                tabSignIn.classList.add('active');
+                tabSignUp.classList.remove('active');
+                formSignIn.style.display = 'block';
+                formSignUp.style.display = 'none';
+                heading.textContent = 'Welcome Back, Student!';
+                subheading.textContent = 'Sign in with your campus credentials to access your peer tutoring dashboard.';
+                if (footerText) {
+                    footerText.innerHTML = `New to Campus-Tutor? <a href="javascript:void(0)" onclick="switchStudentAuthMode('signup')" style="color: var(--accent-amber); font-weight: 700; text-decoration: underline;">Create a student account</a>`;
+                }
+            } else {
+                tabSignUp.classList.add('active');
+                tabSignIn.classList.remove('active');
+                formSignIn.style.display = 'none';
+                formSignUp.style.display = 'block';
+                heading.textContent = 'Create Student Account';
+                subheading.textContent = 'Register on Campus-Tutor with your institutional credentials.';
+                if (footerText) {
+                    footerText.innerHTML = `Already registered? <a href="javascript:void(0)" onclick="switchStudentAuthMode('signin')" style="color: var(--accent-amber); font-weight: 700; text-decoration: underline;">Sign in instead</a>`;
+                }
+            }
+        }
+
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const eyeIcon = btn.querySelector('.eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
+        }
+
+        // Handle Student Login
+        async function handleStudentLogin(e) {
+            e.preventDefault();
+            hideAlert();
+            const email = document.getElementById('student-email').value.trim();
+            const password = document.getElementById('student-password').value;
+            const submitBtn = document.getElementById('student-submit-btn');
+
+            if (!email || !password) {
+                showAlert('Please enter both campus email and password.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.querySelector('.btn-text').textContent = 'Authenticating...';
+            submitBtn.querySelector('.btn-spinner').style.display = 'inline-block';
+
+            try {
+                const user = await window.CampusBackend.signInStudent(email, password);
+                showAlert(`Welcome back, ${user.name}! Redirecting...`, true);
+                initAuthNav();
+
+                setTimeout(() => {
+                    window.location.href = "profile.html";
+                }, 600);
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('.btn-text').textContent = 'Sign In as Student';
+                submitBtn.querySelector('.btn-spinner').style.display = 'none';
+                showAlert(err.message || 'Failed to sign in.');
+            }
+        }
+
+        // Handle Student Sign Up
+        async function handleStudentSignup(e) {
+            e.preventDefault();
+            hideAlert();
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const studentId = document.getElementById('signup-id').value.trim();
+            const department = document.getElementById('signup-dept').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const submitBtn = document.getElementById('signup-submit-btn');
+
+            if (!name || !email || !password) {
+                showAlert('Please fill in all required fields.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.querySelector('.btn-text').textContent = 'Creating account...';
+            submitBtn.querySelector('.btn-spinner').style.display = 'inline-block';
+
+            try {
+                const user = await window.CampusBackend.signUpStudent({ name, email, department, studentId, password });
+                showAlert(`Account created successfully! Welcome, ${user.name}.`, true);
+                initAuthNav();
+
+                setTimeout(() => {
+                    window.location.href = "profile.html";
+                }, 750);
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('.btn-text').textContent = 'Create Student Account';
+                submitBtn.querySelector('.btn-spinner').style.display = 'none';
+                showAlert(err.message || 'Failed to create account.');
+            }
+        }
+    </script>
+</body>
+</html>

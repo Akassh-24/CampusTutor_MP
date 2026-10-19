@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Request - Campus-Tutor</title>
+    <meta name="description" content="Create and publish your peer tutoring help request. Set your comfortable budget and get matched with experienced campus students.">
+    <link rel="stylesheet" href="stylee.css">
+</head>
+<body>
+    <!-- Site Header -->
+    <header class="site-header">
+        <div class="title">
+            <a href="index.html">
+                <h1>Campus-Tutor <span class="logo-badge">PEER</span></h1>
+            </a>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="browse.html">Browse Requests</a>
+            <a href="postrequest.html" class="active">Post a Request</a>
+            <a href="profile.html">My Profile</a>
+            <a href="login.html" class="nav-login-btn">Sign In</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Container: 2-Column Layout (Form + Live Preview Card) -->
+    <main class="main-container">
+        <div class="post-layout">
+            <!-- Left Column: Tutoring Request Form -->
+            <div class="form-card">
+                <h2>Create Your Tutoring Request</h2>
+                <p class="subtitle">Complete the details below to publish your listing to the campus tutor board.</p>
+
+                <form id="create-request-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="req-name">Your Full Name <span class="required-star">*</span></label>
+                            <input type="text" id="req-name" placeholder="e.g. Alex Morgan" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="req-email">Campus Email <span class="required-star">*</span></label>
+                            <input type="email" id="req-email" placeholder="e.g. alex.m@campus.edu" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="req-year">Academic Standing &amp; Major <span class="required-star">*</span></label>
+                            <input type="text" id="req-year" placeholder="e.g. Sophomore (2nd Year) • Computer Science" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="req-subject">Subject Category <span class="required-star">*</span></label>
+                            <select id="req-subject" required>
+                                <option value="" disabled selected>Select a subject...</option>
+                                <option value="Computer Science">💻 Computer Science</option>
+                                <option value="Mathematics">📐 Mathematics</option>
+                                <option value="Physics">⚛️ Physics</option>
+                                <option value="Chemistry">🧪 Chemistry</option>
+                                <option value="Economics">📊 Economics</option>
+                                <option value="Engineering">⚙️ Engineering</option>
+                                <option value="Biology">🧬 Biology</option>
+                                <option value="Other">📚 Other / Humanities</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="req-title">Course Code &amp; Topic <span class="required-star">*</span></label>
+                            <input type="text" id="req-title" placeholder="e.g. CS201: Binary Trees & Traversals" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="req-desc">Detailed Description of Help Needed <span class="required-star">*</span></label>
+                            <textarea 
+                                id="req-desc" 
+                                placeholder="Describe the concepts, problem set, lab, or exam review you need guidance with..."
+                                required
+                            ></textarea>
+                            <span class="hint">Be as specific as possible to get faster and more tailored tutor responses.</span>
+                        </div>
+
+                        <!-- Budget Selector -->
+                        <div class="form-group full-width">
+                            <label>Budget / Compensation Preference <span class="required-star">*</span></label>
+                            <div class="radio-pill-group">
+                                <label class="radio-pill-label checked" id="label-hourly">
+                                    <input type="radio" name="budget-type" value="hourly" checked> Hourly Rate (₹/hr)
+                                </label>
+                                <label class="radio-pill-label" id="label-fixed">
+                                    <input type="radio" name="budget-type" value="fixed"> Fixed Project Budget (₹ flat)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="req-budget-amount" id="budget-amount-label">Hourly Rate (₹ INR / hr) <span class="required-star">*</span></label>
+                            <input type="number" id="req-budget-amount" min="50" step="25" placeholder="e.g. 350" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="req-mode">Preferred Meeting Mode <span class="required-star">*</span></label>
+                            <select id="req-mode" required>
+                                <option value="In-Person (Campus Library)">In-Person (Campus Library)</option>
+                                <option value="In-Person (Student Center/Lab)">In-Person (Student Center / Lab)</option>
+                                <option value="Online (Zoom / Meet)">Online (Zoom / Meet)</option>
+                                <option value="Hybrid (Flexible)">Hybrid (Flexible)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="req-urgency">Timeline &amp; Urgency <span class="required-star">*</span></label>
+                            <select id="req-urgency" required>
+                                <option value="Urgent (Exam in 2-3 Days)">⚡ Urgent (Exam / Assignment due in 2-3 days)</option>
+                                <option value="This Week" selected>🕒 This Week</option>
+                                <option value="Next Week">📅 Next Week</option>
+                                <option value="Flexible Schedule">🌱 Flexible Ongoing Help</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                        <button type="submit" class="butt butt-browse" id="submit-btn">
+                            🚀 Publish Tutoring Request
+                        </button>
+                        <button type="reset" class="butt butt-post" id="reset-btn" style="color: var(--primary-navy); border-color: var(--border-color);">
+                            Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Live Card Preview & Safety Guidelines -->
+            <div class="side-cards">
+                <!-- Live Card Preview -->
+                <div class="side-card" style="border: 2px dashed var(--accent-amber); background: #FAF7F0;">
+                    <span class="card-label">👀 Live Card Preview</span>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin: 0 0 14px;">Here is how your request card will look to peer tutors on the marketplace:</p>
+
+                    <div class="request-card" style="box-shadow: 0 4px 12px rgba(0,0,0,0.06); padding: 20px;">
+                        <div>
+                            <div class="request-header">
+                                <span class="subject-tag" id="preview-subject">Computer Science</span>
+                                <span class="budget-badge" id="preview-budget">₹350 / hr</span>
+                            </div>
+
+                            <h3 class="request-title" id="preview-title" style="font-size: 17px;">Course Code: Topic</h3>
+                            <p class="request-desc" id="preview-desc" style="font-size: 13.5px;">Your description preview will appear here as you type...</p>
+
+                            <div class="request-meta">
+                                <span class="meta-chip" id="preview-mode">📍 Campus Library</span>
+                                <span class="meta-chip" id="preview-urgency">🕒 This Week</span>
+                            </div>
+                        </div>
+
+                        <div class="request-footer" style="padding-top: 12px; margin-top: 10px;">
+                            <div class="requester-info">
+                                <div class="requester-avatar" id="preview-avatar">AM</div>
+                                <div class="requester-details">
+                                    <span class="requester-name" id="preview-name">Your Name</span>
+                                    <span class="requester-year" id="preview-standing">Campus Student</span>
+                                </div>
+                            </div>
+                            <span class="butt butt-browse butt-sm" style="pointer-events: none; opacity: 0.85;">Offer Help</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tutoring Best Practices -->
+                <div class="side-card">
+                    <span class="card-label">Posting Tips</span>
+                    <h4>💡 Best Practices</h4>
+                    <ul>
+                        <li><strong>Be Specific:</strong> Mention your course code, problem sets, and topics for faster responses.</li>
+                        <li><strong>Set Fair Rates:</strong> Transparent budgets help attract experienced student peers.</li>
+                        <li><strong>Campus Meetups:</strong> We recommend public campus locations like the library or study labs.</li>
+                        <li><strong>Clear Communication:</strong> Discuss availability and session goals openly with your tutor.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Campus-Tutor. Connecting campus minds for peer academic success.</p>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="app.js"></script>
+    <script>
+        const form = document.getElementById("create-request-form");
+        const hourlyRadio = document.querySelector('input[name="budget-type"][value="hourly"]');
+        const fixedRadio = document.querySelector('input[name="budget-type"][value="fixed"]');
+        const labelHourly = document.getElementById("label-hourly");
+        const labelFixed = document.getElementById("label-fixed");
+        const budgetAmountLabel = document.getElementById("budget-amount-label");
+
+        // Preview Elements
+        const pSubject = document.getElementById("preview-subject");
+        const pBudget = document.getElementById("preview-budget");
+        const pTitle = document.getElementById("preview-title");
+        const pDesc = document.getElementById("preview-desc");
+        const pMode = document.getElementById("preview-mode");
+        const pUrgency = document.getElementById("preview-urgency");
+        const pAvatar = document.getElementById("preview-avatar");
+        const pName = document.getElementById("preview-name");
+        const pStanding = document.getElementById("preview-standing");
+
+        function updatePreview() {
+            const name = document.getElementById("req-name").value.trim() || "Your Name";
+            const standing = document.getElementById("req-year").value.trim() || "Campus Student";
+            const subject = document.getElementById("req-subject").value || "Computer Science";
+            const title = document.getElementById("req-title").value.trim() || "Course Code: Topic";
+            const desc = document.getElementById("req-desc").value.trim() || "Your description preview will appear here as you type...";
+            const amount = document.getElementById("req-budget-amount").value || "350";
+            const isHourly = hourlyRadio.checked;
+            const mode = document.getElementById("req-mode").value || "In-Person (Campus Library)";
+            const urgency = document.getElementById("req-urgency").value || "This Week";
+
+            pName.textContent = name;
+            pAvatar.textContent = getInitials(name);
+            pStanding.textContent = standing;
+            pSubject.textContent = subject;
+            pTitle.textContent = title;
+            pDesc.textContent = desc.length > 130 ? desc.substring(0, 130) + "..." : desc;
+            pBudget.textContent = isHourly ? `₹${amount} / hr` : `₹${amount} flat`;
+            pMode.textContent = `📍 ${mode.replace(/\s*\(.*\)/, '')}`;
+            
+            const isUrgent = urgency.includes("Urgent");
+            pUrgency.className = isUrgent ? "meta-chip urgent" : "meta-chip";
+            pUrgency.textContent = isUrgent ? "⚡ Urgent" : "🕒 " + urgency.replace(/^[⚡🕒📅🌱]\s*/, '');
+        }
+
+        // Event listeners for live preview
+        form.querySelectorAll("input, select, textarea").forEach(input => {
+            input.addEventListener("input", updatePreview);
+            input.addEventListener("change", updatePreview);
+        });
+
+        // Autofill with logged-in user profile if available, or prompt sign-in
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = getCurrentUser();
+            if (!user) {
+                const main = document.querySelector("main.main-container");
+                if (main) {
+                    main.innerHTML = `
+                        <div class="form-card auth-required-card" style="text-align: center; padding: 60px 24px; max-width: 600px; margin: 40px auto; width: 100%;">
+                            <span style="font-size: 54px; display: block; margin-bottom: 12px;">✍️</span>
+                            <h2 style="margin: 0 0 10px;">Sign In to Post a Request</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14.5px;">
+                                You must be signed in with your campus credentials to publish a tutoring listing, select your budget, and connect with peer tutors.
+                            </p>
+                            <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                                <a href="login.html" class="butt butt-browse">Sign In</a>
+                                <a href="login.html" class="butt butt-post" style="color: var(--primary-navy); border-color: var(--border-color);">Create Account</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            if (user.name) document.getElementById("req-name").value = user.name;
+            if (user.email) document.getElementById("req-email").value = user.email;
+            if (user.department || user.year) {
+                const standing = [user.year, user.department].filter(Boolean).join(" • ");
+                document.getElementById("req-year").value = standing || user.department || "";
+            }
+            updatePreview();
+        });
+
+        // Budget toggle
+        document.querySelectorAll('input[name="budget-type"]').forEach(radio => {
+            radio.addEventListener("change", () => {
+                if (hourlyRadio.checked) {
+                    labelHourly.classList.add("checked");
+                    labelFixed.classList.remove("checked");
+                    budgetAmountLabel.innerHTML = 'Hourly Rate (₹ INR / hr) <span class="required-star">*</span>';
+                } else {
+                    labelFixed.classList.add("checked");
+                    labelHourly.classList.remove("checked");
+                    budgetAmountLabel.innerHTML = 'Total Fixed Budget (₹ INR flat) <span class="required-star">*</span>';
+                }
+                updatePreview();
+            });
+        });
+
+        // Form Submit Handler
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById("submit-btn");
+
+            const name = document.getElementById("req-name").value.trim();
+            const email = document.getElementById("req-email").value.trim();
+            const year = document.getElementById("req-year").value.trim();
+            const subject = document.getElementById("req-subject").value;
+            const title = document.getElementById("req-title").value.trim();
+            const description = document.getElementById("req-desc").value.trim();
+            const budgetType = document.querySelector('input[name="budget-type"]:checked').value;
+            const budgetAmount = parseFloat(document.getElementById("req-budget-amount").value) || 0;
+            const mode = document.getElementById("req-mode").value;
+            const urgency = document.getElementById("req-urgency").value;
+
+            const isUrgent = urgency.includes("Urgent");
+            const formattedBudget = budgetType === "hourly" ? `₹${budgetAmount} / hr` : `₹${budgetAmount} flat`;
+
+            const currentUser = getCurrentUser();
+
+            const requestPayload = {
+                id: "req-" + Date.now(),
+                title: title,
+                subject: subject,
+                requesterId: currentUser ? currentUser.uid : "guest-" + Date.now(),
+                requesterName: name,
+                requesterYear: year,
+                requesterEmail: email,
+                budget: formattedBudget,
+                budgetAmount: budgetAmount,
+                budgetType: budgetType,
+                mode: mode,
+                urgency: urgency.replace(/^[⚡🕒📅🌱]\s*/, ''),
+                isUrgent: isUrgent,
+                description: description,
+                createdAt: "Just now",
+                timestamp: Date.now(),
+                offersCount: 0,
+                status: "active"
+            };
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Publishing to Marketplace...";
+
+            // Save to local store
+            saveRequest(requestPayload);
+
+            showToast("Your request has been published to the marketplace!", "✨");
+            setTimeout(() => {
+                window.location.href = "browse.html";
+            }, 850);
+        });
+
+        document.getElementById("reset-btn").addEventListener("click", () => {
+            setTimeout(updatePreview, 50);
+        });
+    </script>
+</body>
+</html>

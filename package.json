@@ -1,0 +1,25 @@
+{
+  "name": "campus-tutor",
+  "version": "2.0.0",
+  "description": "Campus-Tutor: Peer academic tutoring & study assistance marketplace",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "campus-tutor",
+    "peer-tutoring",
+    "marketplace",
+    "education"
+  ],
+  "author": "Akash Shelke",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

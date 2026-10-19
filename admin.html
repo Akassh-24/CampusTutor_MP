@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional Admin &amp; Moderation Console - Campus-Tutor</title>
+    <meta name="description" content="Campus-Tutor institutional administrative console. Manage campus peer tutors, review flagged reports, and inspect platform analytics.">
+    <link rel="stylesheet" href="stylee.css">
+</head>
+<body class="admin-body">
+    <!-- Dedicated Admin Header (Separated from Student Marketplace Navigation) -->
+    <header class="site-header admin-site-header">
+        <div class="title">
+            <a href="admin.html">
+                <h1>Campus-Tutor <span class="logo-badge admin-badge">ADMIN CONSOLE</span></h1>
+            </a>
+        </div>
+        <nav class="admin-header-nav">
+            <div class="admin-user-pill-header" id="header-admin-pill">
+                <span class="nav-avatar-mini" style="background: #3B82F6; color: white;">DV</span>
+                <span id="nav-admin-name">Dr. Vance (Admin)</span>
+            </div>
+            <a href="javascript:void(0)" onclick="logoutUser(event)" class="nav-signout-btn admin-signout-btn" title="Sign Out of Admin Console">🚪 Sign Out</a>
+        </nav>
+    </header>
+
+    <!-- Admin Hero Banner -->
+    <div class="admin-hero-banner">
+        <div class="admin-hero-content">
+            <div class="admin-hero-title-group">
+                <div class="admin-shield-icon-badge">🛡️</div>
+                <div>
+                    <h2>
+                        Campus Moderation Console
+                        <span class="admin-clearance-pill">Level 3 Clearance</span>
+                    </h2>
+                    <p class="admin-hero-subtitle">Institutional oversight, tutor credential verification, and campus peer moderation.</p>
+                </div>
+            </div>
+
+            <div class="admin-hero-actions">
+                <div class="admin-badge-stat">
+                    <span class="admin-pulse-dot"></span>
+                    <span>System Status: <strong>Online</strong></span>
+                </div>
+                <button type="button" class="admin-btn-primary" onclick="refreshAdminData()">
+                    🔄 Refresh Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Main Container -->
+    <div class="admin-container">
+        <!-- KPI Overview Cards Grid -->
+        <div class="admin-kpi-grid">
+            <div class="admin-kpi-card kpi-navy">
+                <div class="admin-kpi-info">
+                    <h4>Total Campus Members</h4>
+                    <div class="admin-kpi-value" id="kpi-members-count">0</div>
+                    <div class="admin-kpi-sub">Students &amp; Tutors</div>
+                </div>
+                <div class="admin-kpi-icon-box">👥</div>
+            </div>
+
+            <div class="admin-kpi-card kpi-amber">
+                <div class="admin-kpi-info">
+                    <h4>Verified Peer Tutors</h4>
+                    <div class="admin-kpi-value" id="kpi-tutors-count">0</div>
+                    <div class="admin-kpi-sub">★ 4.88 avg peer rating</div>
+                </div>
+                <div class="admin-kpi-icon-box">🎓</div>
+            </div>
+
+            <div class="admin-kpi-card kpi-red">
+                <div class="admin-kpi-info">
+                    <h4>Flagged Reports</h4>
+                    <div class="admin-kpi-value" id="kpi-reports-count">0</div>
+                    <div class="admin-kpi-sub" style="color: #DC2626;">Requires moderator review</div>
+                </div>
+                <div class="admin-kpi-icon-box">⚠️</div>
+            </div>
+
+            <div class="admin-kpi-card kpi-green">
+                <div class="admin-kpi-info">
+                    <h4>Member Satisfaction</h4>
+                    <div class="admin-kpi-value">99.2%</div>
+                    <div class="admin-kpi-sub">Positive peer feedback</div>
+                </div>
+                <div class="admin-kpi-icon-box">⭐</div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Bar (Members & Reports Only) -->
+        <div class="admin-tabs-nav-container">
+            <div class="admin-tabs-list" role="tablist">
+                <button type="button" class="admin-tab-btn active" onclick="switchAdminTab('members')" id="tab-btn-members">
+                    <span>👥 Member Directory</span>
+                    <span class="tab-count-badge" id="badge-tab-members">0</span>
+                </button>
+                <button type="button" class="admin-tab-btn reports-tab" onclick="switchAdminTab('reports')" id="tab-btn-reports">
+                    <span>⚠️ Flagged Reports</span>
+                    <span class="tab-count-badge" id="badge-tab-reports">0</span>
+                </button>
+            </div>
+
+            <div style="font-size: 13px; color: #64748B;">
+                Moderator: <strong id="admin-user-display">Dr. Vance (Faculty Admin)</strong>
+            </div>
+        </div>
+
+        <!-- ==============================================================
+             TAB 1: MEMBER DIRECTORY (Active Default)
+             ============================================================== -->
+        <div id="tab-panel-members" class="admin-tab-panel active">
+            <div class="admin-filter-bar">
+                <div class="admin-search-wrapper">
+                    <span class="admin-search-icon">🔍</span>
+                    <input type="text" id="admin-search-members" class="admin-search-input" placeholder="Search campus directory by name, email, or Student ID...">
+                </div>
+                <div class="admin-filter-groups">
+                    <select id="admin-filter-role" class="admin-select">
+                        <option value="all">All Roles (Students &amp; Tutors)</option>
+                        <option value="tutor">Verified Peer Tutors</option>
+                        <option value="student">Undergraduate Students</option>
+                        <option value="admin">Administrators</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin-card-table">
+                <div class="table-responsive-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Campus Member</th>
+                                <th>ID Code</th>
+                                <th>Major / Department</th>
+                                <th>Role</th>
+                                <th>Rating</th>
+                                <th>Sessions</th>
+                                <th>Strikes</th>
+                                <th>Account Status</th>
+                                <th style="text-align: right;">Member Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-members-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==============================================================
+             TAB 2: FLAGGED INCIDENT REPORTS
+             ============================================================== -->
+        <div id="tab-panel-reports" class="admin-tab-panel" style="display: none;">
+            <div class="admin-filter-bar">
+                <div class="admin-search-wrapper">
+                    <span class="admin-search-icon">🔍</span>
+                    <input type="text" id="admin-search-reports" class="admin-search-input" placeholder="Search reports by student name, reporter, or keyword...">
+                </div>
+                <div class="admin-filter-groups">
+                    <select id="admin-filter-report-status" class="admin-select">
+                        <option value="all">All Incident Statuses</option>
+                        <option value="pending">Pending Review</option>
+                        <option value="investigating">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="admin-reports-feed">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Campus-Tutor. Institutional Administration &amp; Peer Learning Oversight Console.</p>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="app.js"></script>
+    <script>
+        let adminMembers = [];
+        let adminReports = [];
+
+        function switchAdminTab(tabName) {
+            // Update Tab buttons
+            document.querySelectorAll(".admin-tab-btn").forEach(btn => btn.classList.remove("active"));
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            if (activeBtn) activeBtn.classList.add("active");
+
+            // Update Tab Panels
+            document.querySelectorAll(".admin-tab-panel").forEach(panel => {
+                panel.style.display = "none";
+                panel.classList.remove("active");
+            });
+
+            const activePanel = document.getElementById(`tab-panel-${tabName}`);
+            if (activePanel) {
+                activePanel.style.display = "block";
+                activePanel.classList.add("active");
+            }
+        }
+
+        function refreshAdminData() {
+            adminMembers = getStoredMembers();
+            adminReports = getStoredReports();
+
+            // Update KPI cards
+            const tutorCount = adminMembers.filter(m => m.role === 'tutor').length;
+            const pendingReportsCount = adminReports.filter(r => r.status !== 'resolved').length;
+
+            document.getElementById("kpi-members-count").textContent = adminMembers.length;
+            document.getElementById("kpi-tutors-count").textContent = tutorCount;
+            document.getElementById("kpi-reports-count").textContent = pendingReportsCount;
+
+            document.getElementById("badge-tab-members").textContent = adminMembers.length;
+            document.getElementById("badge-tab-reports").textContent = pendingReportsCount;
+
+            renderAdminMembersTable();
+            renderAdminReportsFeed();
+
+            const user = getCurrentUser();
+            if (user && user.name) {
+                document.getElementById("admin-user-display").textContent = `${user.name} (${user.role === 'admin' ? 'Administrator' : 'Faculty Moderator'})`;
+                const navAdminName = document.getElementById("nav-admin-name");
+                if (navAdminName) {
+                    navAdminName.textContent = `${user.name} (Admin)`;
+                }
+            }
+
+            showToast("Admin dashboard metrics reloaded.", "✓");
+        }
+
+        // Render Tab 2: Members Table
+        function renderAdminMembersTable() {
+            const tbody = document.getElementById("admin-members-tbody");
+            const searchVal = (document.getElementById("admin-search-members").value || "").toLowerCase().trim();
+            const roleVal = document.getElementById("admin-filter-role").value;
+
+            let filtered = [...adminMembers];
+
+            if (searchVal) {
+                filtered = filtered.filter(m => 
+                    m.name.toLowerCase().includes(searchVal) ||
+                    m.email.toLowerCase().includes(searchVal) ||
+                    m.id.toLowerCase().includes(searchVal)
+                );
+            }
+
+            if (roleVal !== "all") {
+                filtered = filtered.filter(m => m.role === roleVal);
+            }
+
+            tbody.innerHTML = filtered.map(member => `
+                <tr>
+                    <td>
+                        <div class="member-cell-info">
+                            <div class="member-avatar-pill ${member.role === 'tutor' ? 'avatar-tutor' : ''}">
+                                ${getInitials(member.name)}
+                            </div>
+                            <div class="member-name-block">
+                                <strong>${escapeHtml(member.name)}</strong>
+                                <span>${escapeHtml(member.email)}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="member-id-badge">${member.id}</span></td>
+                    <td><span>${member.department} (${member.year})</span></td>
+                    <td>
+                        <span class="role-badge ${member.role}">
+                            ${member.role === 'admin' ? '🛡️ Admin' : (member.role === 'tutor' ? 'Verified Tutor' : 'Student')}
+                        </span>
+                    </td>
+                    <td><span style="color: #D97706; font-weight: 700;">★ ${member.rating}</span></td>
+                    <td><strong>${member.sessionsCount}</strong></td>
+                    <td>
+                        <span style="color: ${member.strikes > 0 ? '#DC2626' : '#059669'}; font-weight: 700;">
+                            ${member.strikes} strike${member.strikes === 1 ? '' : 's'}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-pill ${member.status === 'active' ? 'status-active' : (member.status === 'warning' ? 'status-warning' : 'status-suspended')}">
+                            ${member.status}
+                        </span>
+                    </td>
+                    <td style="text-align: right;">
+                        <div class="admin-row-actions" style="justify-content: flex-end;">
+                            ${member.role !== 'tutor' ? `<button type="button" class="btn-action-icon btn-action-success" onclick="promoteToTutor('${member.id}')">Make Tutor</button>` : ''}
+                            <button type="button" class="btn-action-icon btn-action-danger" onclick="toggleMemberStatus('${member.id}')">
+                                ${member.status === 'suspended' ? 'Reactivate' : 'Suspend'}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        // Render Tab 3: Reports Feed
+        function renderAdminReportsFeed() {
+            const feed = document.getElementById("admin-reports-feed");
+            const searchVal = (document.getElementById("admin-search-reports").value || "").toLowerCase().trim();
+            const statusVal = document.getElementById("admin-filter-report-status").value;
+
+            let filtered = [...adminReports];
+
+            if (searchVal) {
+                filtered = filtered.filter(r => 
+                    r.title.toLowerCase().includes(searchVal) ||
+                    r.targetUser.toLowerCase().includes(searchVal) ||
+                    r.description.toLowerCase().includes(searchVal)
+                );
+            }
+
+            if (statusVal !== "all") {
+                filtered = filtered.filter(r => r.status === statusVal);
+            }
+
+            if (filtered.length === 0) {
+                feed.innerHTML = `
+                    <div class="admin-card-table" style="padding: 40px; text-align: center; color: #64748B;">
+                        <span style="font-size: 38px; display: block; margin-bottom: 8px;">🛡️</span>
+                        <h4 style="margin: 0 0 4px; color: #0F172A;">No Incident Reports Found</h4>
+                        <p style="margin: 0; font-size: 13.5px;">All campus peer interactions are currently in good standing.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            feed.innerHTML = filtered.map(report => `
+                <div class="report-feed-card ${report.status === 'resolved' ? 'status-resolved-border' : (report.priority === 'high' ? 'status-critical-border' : 'status-pending-border')}">
+                    <div class="report-header-line">
+                        <div class="report-id-time">
+                            <strong>${report.id}</strong>
+                            <span>• Filed ${report.date}</span>
+                            <span class="category-tag">${report.category}</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="priority-tag priority-${report.priority}">${report.priority} priority</span>
+                            <span class="status-pill ${report.status === 'resolved' ? 'status-resolved' : (report.status === 'investigating' ? 'status-investigating' : 'status-pending')}">${report.status}</span>
+                        </div>
+                    </div>
+
+                    <h4 class="report-title-row">${escapeHtml(report.title)}</h4>
+
+                    <div class="report-meta-grid">
+                        <div class="report-meta-item">
+                            <strong>Reported Student / Tutor</strong>
+                            <span>${escapeHtml(report.targetUser)}</span>
+                        </div>
+                        <div class="report-meta-item">
+                            <strong>Complainant / Flag Source</strong>
+                            <span>${escapeHtml(report.reporter)}</span>
+                        </div>
+                    </div>
+
+                    <div class="report-desc-box">
+                        ${escapeHtml(report.description)}
+                    </div>
+
+                    <div class="report-evidence-box">
+                        <strong>🔍 Evidence &amp; System Log:</strong> ${escapeHtml(report.evidence)}
+                    </div>
+
+                    <div class="report-footer-actions">
+                        <span style="font-size: 12.5px; color: #64748B;">Actions require Level 3 Faculty clearance.</span>
+                        <div style="display: flex; gap: 8px;">
+                            ${report.status !== 'resolved' ? `
+                                <button type="button" class="btn-action-icon btn-action-success" onclick="resolveReport('${report.id}')">✓ Mark Resolved</button>
+                                <button type="button" class="btn-action-icon" onclick="issueWarning('${report.id}', '${escapeQuotes(report.targetUser)}')">⚠️ Issue Official Warning</button>
+                            ` : `<span style="color: #059669; font-weight: 700; font-size: 13px;">✓ Case Closed</span>`}
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // Member & Report Actions
+
+        function promoteToTutor(memberId) {
+            const member = adminMembers.find(m => m.id === memberId);
+            if (member) {
+                member.role = 'tutor';
+                localStorage.setItem("campus_tutor_members_v2", JSON.stringify(adminMembers));
+                refreshAdminData();
+                showToast(`${member.name} has been certified as a Verified Peer Tutor!`, '🎓');
+            }
+        }
+
+        function toggleMemberStatus(memberId) {
+            const member = adminMembers.find(m => m.id === memberId);
+            if (member) {
+                member.status = member.status === 'suspended' ? 'active' : 'suspended';
+                localStorage.setItem("campus_tutor_members_v2", JSON.stringify(adminMembers));
+                refreshAdminData();
+                showToast(`Member ${member.name} status updated to: ${member.status}`, '✓');
+            }
+        }
+
+        function resolveReport(reportId) {
+            const report = adminReports.find(r => r.id === reportId);
+            if (report) {
+                report.status = 'resolved';
+                localStorage.setItem("campus_tutor_reports_v2", JSON.stringify(adminReports));
+                refreshAdminData();
+                showToast(`Incident report ${reportId} marked as resolved.`, '✓');
+            }
+        }
+
+        function issueWarning(reportId, targetUser) {
+            alert(`Official academic conduct warning issued to ${targetUser}. Strike recorded on campus record.`);
+            resolveReport(reportId);
+        }
+
+        function resetDemoData() {
+            if (!confirm("Reset all requests, members, and incident reports to initial demo state?")) return;
+            localStorage.clear();
+            refreshAdminData();
+            showToast("Demo database reset to factory state.", "✨");
+        }
+
+        function escapeHtml(text) {
+            if (!text) return "";
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function escapeQuotes(str) {
+            return (str || '').replace(/'/g, "\\'");
+        }
+
+        // Live Search Listeners
+        document.getElementById("admin-search-members").addEventListener("input", renderAdminMembersTable);
+        document.getElementById("admin-filter-role").addEventListener("change", renderAdminMembersTable);
+
+        document.getElementById("admin-search-reports").addEventListener("input", renderAdminReportsFeed);
+        document.getElementById("admin-filter-report-status").addEventListener("change", renderAdminReportsFeed);
+
+        // Initial Load
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = getCurrentUser();
+            if (!user || user.role !== 'admin' || (user.email && user.email.toLowerCase().trim() !== 'akashshelke.2607@gmail.com')) {
+                const banner = document.querySelector(".admin-hero-banner");
+                const container = document.querySelector(".admin-container");
+                if (banner) banner.style.display = "none";
+                if (container) {
+                    container.innerHTML = `
+                        <div class="form-card auth-required-card" style="text-align: center; padding: 60px 24px; max-width: 600px; margin: 60px auto; width: 100%; border-top: 4px solid #3B82F6;">
+                            <span style="font-size: 54px; display: block; margin-bottom: 12px;">🛡️</span>
+                            <h2 style="margin: 0 0 10px; color: var(--primary-navy);">Master Administrator Access Only</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14.5px;">
+                                This institutional console is strictly restricted to authorized master administrator <strong>akashshelke.2607@gmail.com</strong>.
+                            </p>
+                            <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                                <a href="admin-login.html" class="butt butt-browse" style="background: #2563EB; border-color: #1D4ED8; color: white;">Sign In as Akash Shelke</a>
+                                <a href="login.html" class="butt butt-post" style="color: var(--primary-navy); border-color: var(--border-color);">Student Sign In</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            refreshAdminData();
+        });
+    </script>
+</body>
+</html>

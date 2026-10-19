@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus-Tutor - Peer Academic Help Marketplace</title>
+    <meta name="description" content="Campus-Tutor connects college students who need academic assistance with verified peers in the same university. Find help or earn by tutoring.">
+    <link rel="stylesheet" href="stylee.css">
+</head>
+<body class="home-page">
+    <!-- Site Header -->
+    <header class="site-header">
+        <div class="title">
+            <a href="index.html">
+                <h1>Campus-Tutor <span class="logo-badge">PEER</span></h1>
+            </a>
+        </div>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="browse.html">Browse Requests</a>
+            <a href="postrequest.html">Post a Request</a>
+            <a href="profile.html">My Profile</a>
+            <a href="login.html" class="nav-login-btn">Sign In</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="full-page-bg">
+        <img src="Studyingimg.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80';" alt="Students Studying" class="background-image">
+        <div class="overlay"></div>
+
+        <main class="home-content">
+            <div class="hero-pill">
+                <span>🎓 Verified Campus Student Network</span>
+            </div>
+
+            <div class="Description">
+                <h2>Ace Your Courses With <span>Peer Tutors</span> Who Know The Syllabus</h2>
+                <p>
+                    Post what you're struggling with, set your comfortable budget, and get matched with a student who took the exact course and aced it.
+                </p>
+            </div>
+
+            <div class="home-buttons">
+                <a href="browse.html" class="butt butt-browse">🔍 Browse Help Requests</a>
+                <a href="postrequest.html" class="butt butt-post">✍️ Post a Request</a>
+            </div>
+
+            <!-- Real-Time Metrics Strip -->
+            <div class="home-stats-strip">
+                <div class="stat-item">
+                    <span class="stat-number">650+</span>
+                    <span class="stat-label">Active Campus Students</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">140+</span>
+                    <span class="stat-label">Verified Peer Tutors</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">48+</span>
+                    <span class="stat-label">Subjects & Majors</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">&lt; 15 min</span>
+                    <span class="stat-label">Average Response Time</span>
+                </div>
+            </div>
+
+            <!-- How It Works Flow Cards -->
+            <div class="how-it-works">
+                <div class="card">
+                    <span class="card-label">Step 01 • Post</span>
+                    <h3>Say What You Need</h3>
+                    <p>Specify the course code, topic, chapter, assignment question, meeting preference, and your budget.</p>
+                </div>
+                <div class="card">
+                    <span class="card-label">Step 02 • Match</span>
+                    <h3>Qualified Peers Apply</h3>
+                    <p>Students from your campus review your post and send quick proposals with their availability.</p>
+                </div>
+                <div class="card">
+                    <span class="card-label">Step 03 • Learn</span>
+                    <h3>Connect &amp; Excel</h3>
+                    <p>Meet up at the library, lab, or via Zoom. Learn collaboratively and leave a trusted peer review.</p>
+                </div>
+            </div>
+
+            <!-- Featured Tutoring Requests Preview Section -->
+            <div style="width: 100%; margin-top: 50px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 22px; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <span class="card-label">Live Campus Board</span>
+                        <h3 style="color: #FFFFFF; font-family: 'Outfit', sans-serif; font-size: 26px; margin: 0;">Recent Tutoring Requests</h3>
+                    </div>
+                    <a href="browse.html" style="color: var(--accent-amber); text-decoration: none; font-weight: 700; font-size: 14.5px;">View All Requests →</a>
+                </div>
+
+                <div class="requests-grid" id="featured-requests-grid">
+                    <!-- Populated by script below -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Campus-Tutor. Connecting campus minds for peer academic success.</p>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const grid = document.getElementById("featured-requests-grid");
+            if (!grid) return;
+
+            const allRequests = getStoredRequests();
+            const featured = allRequests.slice(0, 3);
+
+            grid.innerHTML = featured.map(req => `
+                <div class="request-card" style="background: rgba(255, 255, 255, 0.98);">
+                    <div>
+                        <div class="request-header">
+                            <span class="subject-tag">${req.subject || 'Academics'}</span>
+                            <span class="budget-badge">${req.budget}</span>
+                        </div>
+                        <h3 class="request-title" style="font-size: 18px;">${req.title}</h3>
+                        <p class="request-desc" style="font-size: 13.5px;">${req.description.substring(0, 110)}...</p>
+                        <div class="request-meta">
+                            <span class="meta-chip">📍 ${req.mode || 'Flexible'}</span>
+                            <span class="meta-chip ${req.isUrgent ? 'urgent' : ''}">
+                                ${req.isUrgent ? '⚡ ' : '🕒 '}${req.urgency || 'This Week'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="request-footer">
+                        <div class="requester-info">
+                            <div class="requester-avatar">${getInitials(req.requesterName)}</div>
+                            <div class="requester-details">
+                                <span class="requester-name">${req.requesterName}</span>
+                                <span class="requester-year">${req.requesterYear || 'Student'}</span>
+                            </div>
+                        </div>
+                        <a href="browse.html" class="butt butt-browse butt-sm">Offer Help</a>
+                    </div>
+                </div>
+            `).join("");
+        });
+    </script>
+</body>
+</html>

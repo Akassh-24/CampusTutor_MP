@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional Moderator Sign In - Campus-Tutor</title>
+    <meta name="description" content="Dedicated institutional admin and faculty moderator portal for Campus-Tutor.">
+    <link rel="stylesheet" href="stylee.css">
+</head>
+<body class="auth-page admin-body">
+    <!-- Dedicated Admin Header (Separated from Student Navigation) -->
+    <header class="site-header admin-site-header">
+        <div class="title">
+            <a href="admin-login.html">
+                <h1>Campus-Tutor <span class="logo-badge admin-badge">ADMIN CONSOLE</span></h1>
+            </a>
+        </div>
+        <nav class="admin-header-nav">
+            <a href="index.html" class="admin-nav-return-btn">← Back to Campus Site</a>
+        </nav>
+    </header>
+
+    <!-- Main Admin Login Area -->
+    <main class="auth-main-wrapper" style="background: radial-gradient(circle at 50% 20%, #1c2742 0%, #0f172a 65%, #050b14 100%);">
+        <!-- Ambient Background Glow -->
+        <div class="auth-bg-blob blob-1" style="background: rgba(59, 130, 246, 0.2);"></div>
+        <div class="auth-bg-blob blob-2" style="background: rgba(37, 99, 235, 0.15);"></div>
+        <div class="auth-bg-blob blob-3" style="background: rgba(147, 197, 253, 0.1);"></div>
+
+        <div class="auth-container">
+            <div class="auth-form-card admin-mode-active" id="auth-form-card" style="border-top: 4px solid #3B82F6;">
+                
+                <!-- Institutional Shield Header -->
+                <div style="text-align: center; margin-bottom: 22px;">
+                    <div class="admin-shield-icon-badge" style="margin: 0 auto 12px; width: 52px; height: 52px; font-size: 24px; background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);">
+                        🛡️
+                    </div>
+                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 24px; color: var(--primary-navy); margin: 0 0 6px;">
+                        Institutional Moderator Sign In
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 13.5px; margin: 0; line-height: 1.5;">
+                        Authorized faculty and staff credentials required for moderation console access.
+                    </p>
+                </div>
+
+                <!-- Alert Notification Box -->
+                <div id="auth-alert-message" class="auth-alert-box" style="display: none;">
+                    <span id="auth-alert-icon">⚠️</span>
+                    <span id="auth-alert-text"></span>
+                </div>
+
+                <!-- Admin Sign In Form -->
+                <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+                    <div class="input-group">
+                        <label for="admin-email">Administrator Email <span class="required-star">*</span></label>
+                        <div class="input-field-wrapper">
+                            <input 
+                                type="email" 
+                                id="admin-email" 
+                                placeholder="akashshelke.2607@gmail.com" 
+                                value="akashshelke.2607@gmail.com"
+                                required
+                                autocomplete="username"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="admin-password">Administrative Master Key <span class="required-star">*</span></label>
+                        <div class="input-field-wrapper">
+                            <input 
+                                type="password" 
+                                id="admin-password" 
+                                placeholder="Enter administrative master password" 
+                                value="Akash1029@"
+                                required
+                                autocomplete="current-password"
+                            >
+                            <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('admin-password', this)" aria-label="Toggle password visibility">
+                                <span class="eye-icon">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn admin-btn" id="admin-submit-btn">
+                        <span class="btn-text">Authenticate &amp; Enter Console</span>
+                        <span class="btn-spinner" style="display: none;"></span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </form>
+
+                <!-- Quick Autofill Helper -->
+                <div style="margin-top: 18px; background: #F8FAFC; border: 1.5px dashed #CBD5E1; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #475569; text-align: center;">
+                    <span style="display: block; margin-bottom: 4px; font-weight: 600; color: #334155;">Sole Authorized Master Admin:</span>
+                    <a href="javascript:void(0)" onclick="fillAdminDemo()" style="color: #2563EB; font-weight: 700; text-decoration: underline;">
+                        ⚡ Click to Autofill Admin (akashshelke.2607@gmail.com)
+                    </a>
+                </div>
+
+                <!-- Link to return to Student Sign In -->
+                <div style="margin-top: 20px; text-align: center; border-top: 1px solid #F1F5F9; padding-top: 14px; font-size: 13px; color: #64748B;">
+                    Looking for student tutoring? 
+                    <a href="login.html" style="color: #2563EB; font-weight: 600; text-decoration: none;">Student Sign In Portal →</a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Campus-Tutor. Institutional Administration &amp; Moderation Console.</p>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="app.js"></script>
+    <script>
+        function showAlert(msg, isSuccess = false) {
+            const box = document.getElementById('auth-alert-message');
+            const txt = document.getElementById('auth-alert-text');
+            const icon = document.getElementById('auth-alert-icon');
+            if (!box || !txt) return;
+
+            txt.textContent = msg;
+            icon.textContent = isSuccess ? '✅' : '⚠️';
+            box.className = isSuccess ? 'auth-alert-box success' : 'auth-alert-box';
+            box.style.display = 'flex';
+        }
+
+        function hideAlert() {
+            const box = document.getElementById('auth-alert-message');
+            if (box) box.style.display = 'none';
+        }
+
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const eyeIcon = btn.querySelector('.eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
+        }
+
+        function fillAdminDemo() {
+            document.getElementById('admin-email').value = 'akashshelke.2607@gmail.com';
+            document.getElementById('admin-password').value = 'Akash1029@';
+            showAlert('Master Admin credentials filled. Click Authenticate to enter console.', true);
+        }
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            hideAlert();
+            const email = document.getElementById('admin-email').value.trim();
+            const password = document.getElementById('admin-password').value;
+            const submitBtn = document.getElementById('admin-submit-btn');
+
+            if (!email || !password) {
+                showAlert('Please enter both staff ID and password.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.querySelector('.btn-text').textContent = 'Verifying Clearance...';
+            submitBtn.querySelector('.btn-spinner').style.display = 'inline-block';
+
+            try {
+                const adminUser = await window.CampusBackend.signInAdmin(email, password);
+                showAlert('Administrator clearance verified! Entering console...', true);
+                setTimeout(() => {
+                    window.location.href = "admin.html";
+                }, 600);
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('.btn-text').textContent = 'Authenticate & Enter Console';
+                submitBtn.querySelector('.btn-spinner').style.display = 'none';
+                showAlert(err.message || 'Invalid administrative credentials.');
+            }
+        }
+    </script>
+</body>
+</html>

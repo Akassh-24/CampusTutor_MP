@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: campus-tutor
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: ADMIN_EMAIL
+        value: akashshelke.2607@gmail.com
+      - key: ADMIN_PASSWORD
+        value: Akash1029@
+      - key: JWT_SECRET
+        generateValue: true
